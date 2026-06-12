@@ -7,7 +7,6 @@ import com.example.unihub.mapper.AnnouncementMapper;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
 import java.util.List;
 
 @Service
@@ -23,9 +22,6 @@ public class AnnouncementService {
     }
 
     public List<Announcement> getActive(String role) {
-        String cacheKey = "announcements:" + role;
-        String cached = redisTemplate.opsForValue().get(cacheKey);
-        // For simplicity, skip complex JSON caching and go direct to DB
         return announcementMapper.selectList(
                 new LambdaQueryWrapper<Announcement>()
                         .in(Announcement::getTargetRole, role, "all")

@@ -33,24 +33,20 @@ public class CourseSelectionController {
     @PostMapping("/select/{courseId}")
     @PreAuthorize("hasRole('student')")
     public ApiResult<Void> select(@PathVariable Integer courseId, Authentication auth) {
-        String username = auth.getName();
-        // In real app, lookup student ID from username
-        selectionService.selectCourse(Integer.parseInt(username), courseId);
+        selectionService.selectCourse(Integer.parseInt(auth.getName()), courseId);
         return ApiResult.success(null);
     }
 
     @DeleteMapping("/drop/{courseId}")
     @PreAuthorize("hasRole('student')")
     public ApiResult<Void> drop(@PathVariable Integer courseId, Authentication auth) {
-        String username = auth.getName();
-        selectionService.dropCourse(Integer.parseInt(username), courseId);
+        selectionService.dropCourse(Integer.parseInt(auth.getName()), courseId);
         return ApiResult.success(null);
     }
 
     @GetMapping("/my")
     @PreAuthorize("hasRole('student')")
     public ApiResult<List<CourseSelection>> my(Authentication auth) {
-        String username = auth.getName();
-        return ApiResult.success(selectionService.getByStudent(Integer.parseInt(username)));
+        return ApiResult.success(selectionService.getByStudent(Integer.parseInt(auth.getName())));
     }
 }
