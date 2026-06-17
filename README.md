@@ -50,8 +50,8 @@
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/guangchenmushi/exuslal-v2.git
-cd exuslal-v2
+git clone https://github.com/guangchenmushi/exuslal.git
+cd exuslal
 
 # 2. 创建数据库
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS demo2 DEFAULT CHARACTER SET utf8mb4;"
@@ -154,8 +154,8 @@ A modern campus management system built with Spring Boot 3 + Vue 3. Role-based a
 
 ```bash
 # 1. Clone
-git clone https://github.com/guangchenmushi/exuslal-v2.git
-cd exuslal-v2
+git clone https://github.com/guangchenmushi/exuslal.git
+cd exuslal
 
 # 2. Create database
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS demo2 DEFAULT CHARACTER SET utf8mb4;"
