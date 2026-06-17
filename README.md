@@ -37,16 +37,50 @@
 | **图表** | ECharts 5.6.0 |
 | **构建** | Maven 3.x (后端) / npm (前端) |
 
-## 🚀 快速开始
+## � 部署
+
+### 构建
 
 ```bash
-# 前置要求：JDK 17+, MySQL 8+, Node.js 18+, Maven 3+
+# 后端构建
+cd backend
+mvn clean package -DskipTests
 
-# 1. 创建数据库
-mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS demo2 DEFAULT CHARACTER SET utf8mb4;"
+# 前端构建
+cd frontend
+npm install
+npm run build
+```
 
-# 2. 配置数据库连接
-# 编辑 backend/src/main/resources/application.yml
+### 启动
+
+```bash
+# 启动后端
+cd backend
+mvn spring-boot:run
+
+# 启动前端开发服务器
+cd frontend
+npm run dev
+```
+
+访问 http://localhost:5173
+
+默认管理员账号：`admin` / `123456`
+
+---
+
+# English
+
+## 📋 Introduction
+
+A modern campus management system built with Spring Boot 3 + Vue 3 covering student management, course selection, grades, attendance, announcements and more.
+
+## 🚀 Quick Start
+
+See Chinese section above.
+
+---
 
 # 3. 启动后端
 cd backend
