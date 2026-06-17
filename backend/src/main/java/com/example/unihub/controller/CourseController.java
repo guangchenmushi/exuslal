@@ -1,11 +1,20 @@
 package com.example.unihub.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.unihub.dto.ApiResult;
 import com.example.unihub.entity.Course;
 import com.example.unihub.service.CourseService;
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/courses")
@@ -49,5 +58,12 @@ public class CourseController {
     public ApiResult<Void> delete(@PathVariable Integer id) {
         courseService.delete(id);
         return ApiResult.success(null);
+    }
+
+    @PostMapping("/fix-data")
+    @PreAuthorize("hasRole('admin')")
+    public ApiResult<String> fixCourseData() {
+        courseService.fixClassroomAndSchedule();
+        return ApiResult.success("OK");
     }
 }

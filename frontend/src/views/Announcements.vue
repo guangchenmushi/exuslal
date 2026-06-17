@@ -7,7 +7,7 @@
         <el-table-column prop="title" label="标题" min-width="160" />
         <el-table-column prop="content" label="内容" min-width="260" show-overflow-tooltip />
         <el-table-column prop="targetRole" label="目标角色" width="100" />
-        <el-table-column prop="publishTime" label="发布时间" width="170" />
+        <el-table-column label="发布时间" width="170"><template #default="{row}">{{ (row.publishTime || '').replace('T',' ') }}</template></el-table-column>
         <el-table-column label="操作" width="120" fixed="right" v-if="auth.isAdmin">
           <template #default="{ row }">
             <el-button size="small" type="danger" @click="remove(row.id)">删除</el-button>
@@ -40,6 +40,7 @@
 import { ref, onMounted } from 'vue'
 import { getAnnouncements, addAnnouncement, deleteAnnouncement } from '@/api'
 import { useAuthStore } from '@/stores/auth'
+import { ElMessage } from 'element-plus'
 
 const auth = useAuthStore()
 const announcements = ref([])
@@ -54,19 +55,26 @@ async function fetchData() {
   try {
     const res = await getAnnouncements({ page: 1, size: 100 })
     announcements.value = res.data.records
-  } catch (e) { /* ignore */ }
+  } catch (e) {
+    ElMessage.error(e?.response?.data?.message || e?.message || '获取公告列表失败')
+  }
   loading.value = false
 }
 
 async function save() {
-  await addAnnouncement(form.value)
-  showAdd.value = false
-  form.value = { title: '', content: '', targetRole: 'all' }
-  fetchData()
+  try {
+    await addAnnouncement(form.value)
+    ElMessage.success('发布成功')
+    showAdd.value = false
+    form.value = { title: '', content: '', targetRole: 'all' }
+    fetchData()
+  } catch(e) { ElMessage.error(e?.response?.data?.message || e?.message || '发布失败') }
 }
 
 async function remove(id) {
-  await deleteAnnouncement(id)
-  fetchData()
+  try {
+    await deleteAnnouncement(id)
+    fetchData()
+  } catch(e) { ElMessage.error(e?.response?.data?.message || e?.message || '删除失败') }
 }
 </script>

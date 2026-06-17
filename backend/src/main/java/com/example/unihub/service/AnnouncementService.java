@@ -1,13 +1,15 @@
 package com.example.unihub.service;
 
+import java.util.List;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.unihub.entity.Announcement;
 import com.example.unihub.mapper.AnnouncementMapper;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class AnnouncementService {
@@ -34,16 +36,19 @@ public class AnnouncementService {
                         .orderByDesc(Announcement::getPublishTime));
     }
 
+    @Transactional
     public void add(Announcement announcement) {
         announcementMapper.insert(announcement);
         clearCache();
     }
 
+    @Transactional
     public void update(Announcement announcement) {
         announcementMapper.updateById(announcement);
         clearCache();
     }
 
+    @Transactional
     public void delete(Integer id) {
         announcementMapper.deleteById(id);
         clearCache();

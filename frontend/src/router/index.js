@@ -9,6 +9,18 @@ const routes = [
     meta: { requiresAuth: false }
   },
   {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/Register.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/ForgotPassword.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
     path: '/',
     component: () => import('@/views/Layout.vue'),
     meta: { requiresAuth: true },
@@ -21,8 +33,19 @@ const routes = [
       { path: 'grades', name: 'Grades', component: () => import('@/views/Grades.vue') },
       { path: 'announcements', name: 'Announcements', component: () => import('@/views/Announcements.vue') },
       { path: 'attendance', name: 'Attendance', component: () => import('@/views/Attendance.vue') },
-      { path: 'profile', name: 'Profile', component: () => import('@/views/Profile.vue') }
+      { path: 'homework', name: 'Homework', component: () => import('@/views/Homework.vue') },
+      { path: 'exams', name: 'Exams', component: () => import('@/views/Exams.vue') },
+      { path: 'audit-logs', name: 'AuditLogs', component: () => import('@/views/AuditLogs.vue') },
+      { path: 'login-logs', name: 'LoginLogs', component: () => import('@/views/LoginLogs.vue') },
+      { path: 'profile', name: 'Profile', component: () => import('@/views/Profile.vue') },
+      { path: 'classes', name: 'Classes', component: () => import('@/views/Classes.vue'), meta: { roles: ['admin'] } },
+      { path: 'semesters', name: 'Semesters', component: () => import('@/views/Semesters.vue'), meta: { roles: ['admin'] } }
     ]
+  },
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    redirect: '/dashboard'
   }
 ]
 
@@ -35,7 +58,9 @@ router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
   if (to.meta.requiresAuth && !auth.isLoggedIn) {
     next('/login')
-  } else if (to.path === '/login' && auth.isLoggedIn) {
+  } else if (auth.isLoggedIn && (to.path === '/login' || to.path === '/register' || to.path === '/forgot-password')) {
+    next('/dashboard')
+  } else if (to.meta.roles && (!auth.role || !to.meta.roles.includes(auth.role))) {
     next('/dashboard')
   } else {
     next()

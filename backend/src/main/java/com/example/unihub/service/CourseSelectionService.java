@@ -1,14 +1,16 @@
 package com.example.unihub.service;
 
+import java.time.Duration;
+import java.util.List;
+
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.unihub.entity.CourseSelection;
 import com.example.unihub.mapper.CourseSelectionMapper;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.stereotype.Service;
-
-import java.time.Duration;
-import java.util.List;
 
 @Service
 public class CourseSelectionService {
@@ -31,7 +33,8 @@ public class CourseSelectionService {
         return selectionMapper.selectPage(p, q);
     }
 
-    public boolean selectCourse(Integer studentId, Integer courseId) {
+    @Transactional
+    public boolean selectCourse(int studentId, int courseId) {
         String lockKey = "lock:course:" + courseId;
         Boolean locked = redisTemplate.opsForValue()
                 .setIfAbsent(lockKey, "1", Duration.ofSeconds(5));
@@ -56,14 +59,15 @@ public class CourseSelectionService {
         }
     }
 
-    public void dropCourse(Integer studentId, Integer courseId) {
+    @Transactional
+    public void dropCourse(int studentId, int courseId) {
         selectionMapper.delete(
                 new LambdaQueryWrapper<CourseSelection>()
                         .eq(CourseSelection::getStudentId, studentId)
                         .eq(CourseSelection::getCourseId, courseId));
     }
 
-    public List<CourseSelection> getByStudent(Integer studentId) {
+    public List<CourseSelection> getByStudent(int studentId) {
         return selectionMapper.selectList(
                 new LambdaQueryWrapper<CourseSelection>()
                         .eq(CourseSelection::getStudentId, studentId));

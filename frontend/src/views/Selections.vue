@@ -5,15 +5,22 @@
       <el-col :span="12" v-for="c in courses" :key="c.id" style="margin-bottom:16px">
         <el-card shadow="hover">
           <div class="course-name">{{ c.name }}</div>
-          <div class="course-info">编号：{{ c.code }} | 学分：{{ c.credit }} | 容量：{{ c.maxStudents }}</div>
+          <div class="course-info">编号：{{ c.code }} | 学分：{{ c.credit }}</div>
           <div class="course-info">教室：{{ c.classroom }} | 时间：{{ c.schedule }}</div>
-          <el-button
-            :type="selectedIds.has(c.id) ? 'danger' : 'primary'"
-            size="small"
-            style="margin-top:8px"
-            @click="toggle(c.id)">
-            {{ selectedIds.has(c.id) ? '退选' : '选课' }}
-          </el-button>
+          <div class="course-info" style="margin-top:4px">
+            容量：<el-tag :type="capacityType(c)" size="small">{{ c.maxStudents }}人</el-tag>
+            <span v-if="c.selectedCount !== undefined" style="margin-left:8px;color:#64748b">已选 {{ c.selectedCount }} 人</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <el-button
+              :type="selectedIds.has(c.id) ? 'danger' : 'primary'"
+              size="small"
+              @click="toggle(c.id)">
+              {{ selectedIds.has(c.id) ? '退选' : '选课' }}
+            </el-button>
+            <el-tag v-if="capacityType(c) === 'danger'" type="danger" effect="dark" size="small">已满</el-tag>
+            <el-tag v-else-if="capacityType(c) === 'warning'" type="warning" effect="dark" size="small">紧张</el-tag>
+          </div>
         </el-card>
       </el-col>
     </el-row>
@@ -24,6 +31,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { getCourses, selectCourse, dropCourse, getMySelections } from '@/api'
+import { ElMessage } from 'element-plus'
 
 const courses = ref([])
 const selectedIds = ref(new Set())
@@ -32,12 +40,23 @@ onMounted(async () => {
   try {
     const res = await getCourses({ page: 1, size: 100 })
     courses.value = res.data.records
-  } catch (e) { /* ignore */ }
+  } catch (e) { 
+    ElMessage.error(e?.response?.data?.message || e?.message || '获取课程列表失败')
+  }
   try {
     const my = await getMySelections()
     my.data.forEach(s => selectedIds.value.add(s.courseId))
-  } catch (e) { /* ignore */ }
+  } catch (e) { 
+    ElMessage.error(e?.response?.data?.message || e?.message || '获取已选课程失败')
+  }
 })
+
+function capacityType(c) {
+  const ratio = (c.selectedCount || 0) / c.maxStudents
+  if (ratio >= 1) return 'danger'
+  if (ratio >= 0.8) return 'warning'
+  return 'success'
+}
 
 async function toggle(courseId) {
   try {
@@ -49,7 +68,7 @@ async function toggle(courseId) {
       selectedIds.value.add(courseId)
     }
   } catch (e) {
-    alert(e?.message || '操作失败')
+    ElMessage.error(e?.response?.data?.message || e?.message || '操作失败')
   }
 }
 </script>

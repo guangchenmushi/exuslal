@@ -3,7 +3,8 @@ import { login as loginApi } from '@/api'
 import { ref, computed } from 'vue'
 
 export const useAuthStore = defineStore('auth', () => {
-  const token = ref(localStorage.getItem('token') || '')
+  const rawToken = localStorage.getItem('token')
+  const token = ref(rawToken && rawToken !== 'undefined' ? rawToken : '')
   const username = ref(localStorage.getItem('username') || '')
   const role = ref(localStorage.getItem('role') || '')
   const name = ref(localStorage.getItem('name') || '')
@@ -15,6 +16,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   async function login(credentials) {
     const res = await loginApi(credentials)
+    if (res.code !== 200) {
+      throw new Error(res.message || '登录失败')
+    }
     token.value = res.data.token
     username.value = res.data.username
     role.value = res.data.role
