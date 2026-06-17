@@ -37,50 +37,24 @@
 | **图表** | ECharts 5.6.0 |
 | **构建** | Maven 3.x (后端) / npm (前端) |
 
-## � 部署
+## 🚀 快速开始
 
-### 构建
+### 前置要求
 
-```bash
-# 后端构建
-cd backend
-mvn clean package -DskipTests
+- JDK 17+
+- MySQL 8+
+- Node.js 18+
+- Maven 3.x（或用项目自带的 `mvnw`）
 
-# 前端构建
-cd frontend
-npm install
-npm run build
-```
-
-### 启动
+### 安装与启动
 
 ```bash
-# 启动后端
-cd backend
-mvn spring-boot:run
+# 1. 克隆仓库
+git clone https://github.com/guangchenmushi/exuslal-v2.git
+cd exuslal-v2
 
-# 启动前端开发服务器
-cd frontend
-npm run dev
-```
-
-访问 http://localhost:5173
-
-默认管理员账号：`admin` / `123456`
-
----
-
-# English
-
-## 📋 Introduction
-
-A modern campus management system built with Spring Boot 3 + Vue 3 covering student management, course selection, grades, attendance, announcements and more.
-
-## 🚀 Quick Start
-
-See Chinese section above.
-
----
+# 2. 创建数据库
+mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS demo2 DEFAULT CHARACTER SET utf8mb4;"
 
 # 3. 启动后端
 cd backend
@@ -90,11 +64,13 @@ mvnw spring-boot:run
 cd frontend
 npm install
 npm run dev
-
-# 5. 访问 http://localhost:5173
 ```
 
-## 👤 测试账号
+### 访问
+
+打开浏览器访问 **http://localhost:5173**
+
+### 测试账号
 
 | 角色 | 账号 | 密码 |
 |------|------|------|
@@ -124,9 +100,9 @@ npm run dev
 │       ├── api/                    # Axios API 封装
 │       ├── router/                 # Vue Router 路由
 │       ├── stores/                 # Pinia 状态管理
-│       └── views/                  # 页面组件 (9 个)
+│       └── views/                  # 页面组件
 ├── .gitignore
-├── LICENSE                         # MIT
+├── LICENSE
 └── README.md
 ```
 
@@ -147,45 +123,56 @@ A modern campus management system built with Spring Boot 3 + Vue 3. Role-based a
 - **JWT Authentication** — stateless token-based auth for SPA architecture
 - **Redis Caching** — announcement cache + distributed lock for course selection
 - **EasyExcel Import/Export** — streaming read/write, solves OOM issues
-- **ECharts Dashboard** — data visualization with bar/pie charts
+- **ECharts Dashboard** — data visualization with bar/pie/line charts
 - **Element Plus UI** — modern component library
 
 ## 🛠 Tech Stack
 
-| Layer | Stack |
-|-------|-------|
+| Layer | Technology |
+|------|------------|
 | **Backend** | Spring Boot 3.4.3, Spring Security, JWT |
 | **ORM** | MyBatis-Plus 3.5.9 |
 | **Frontend** | Vue 3 + Vite 6 + Element Plus |
-| **State** | Pinia |
+| **State Mgmt** | Pinia |
 | **Router** | Vue Router 4 |
 | **Database** | MySQL 8 |
 | **Cache** | Redis (Spring Data Redis) |
 | **Excel** | EasyExcel 4.0.3 |
 | **Charts** | ECharts 5.6.0 |
-| **Build** | Maven 3.x / npm |
+| **Build** | Maven 3.x (backend) / npm (frontend) |
 
 ## 🚀 Quick Start
 
-```bash
-# Requirements: JDK 17+, MySQL 8+, Node.js 18+, Maven 3+
+### Prerequisites
 
-# 1. Create database
+- JDK 17+
+- MySQL 8+
+- Node.js 18+
+- Maven 3.x (or use built-in `mvnw`)
+
+### Setup
+
+```bash
+# 1. Clone
+git clone https://github.com/guangchenmushi/exuslal-v2.git
+cd exuslal-v2
+
+# 2. Create database
 mysql -u root -p -e "CREATE DATABASE IF NOT EXISTS demo2 DEFAULT CHARACTER SET utf8mb4;"
 
-# 2. Configure connection
-# Edit backend/src/main/resources/application.yml
-
 # 3. Start backend
-cd backend && mvnw spring-boot:run
+cd backend
+mvnw spring-boot:run
 
-# 4. Start frontend (new terminal)
-cd frontend && npm install && npm run dev
-
-# 5. Open http://localhost:5173
+# 4. New terminal, start frontend
+cd frontend
+npm install
+npm run dev
 ```
 
-## 👤 Test Accounts
+Open **http://localhost:5173** in your browser.
+
+### Test Accounts
 
 | Role | Username | Password |
 |------|----------|----------|
@@ -193,20 +180,6 @@ cd frontend && npm install && npm run dev
 | Teacher | teacher00 | 123456 |
 | Student | 2501330000 | 123456 |
 
-## 📁 Project Structure
-
-```
-├── backend/                  # Spring Boot REST API
-├── frontend/                 # Vue 3 + Vite
-├── .gitignore
-├── LICENSE
-└── README.md
-```
-
 ## 📄 License
-
-MIT License — see [LICENSE](LICENSE).
-
-## License
 
 MIT License — see [LICENSE](LICENSE).
